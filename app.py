@@ -46,28 +46,19 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # --- Render chat history ---
-for msg in st.session_state.messages:
+for i, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
         if msg["role"] == "assistant":
-            col1, col2 = st.columns([1, 5])
-            with col1:
-                st.button(
-                    "Copy",
-                    key=f"copy_{msg['content'][:20]}",
-                    on_click=lambda c=msg["content"]: st.write(
-                        f'<script>navigator.clipboard.writeText({repr(c)})</script>',
-                        unsafe_allow_html=True
-                    )
-                )
+            st.button("Copy", key=f"copy_hist_{i}")
             if "query" in msg:
                 st.caption(f"🔍 Searched for: `{msg['query']}`")
             if "sources" in msg:
-                with st.expander("Sources"):
+                with st.expander("Sources", expanded=False):
                     for s in msg["sources"]:
                         st.markdown(f"- [{s['title']}]({s['url']})")
             if show_raw and "raw" in msg:
-                with st.expander("Raw search data"):
+                with st.expander("Raw search data", expanded=False):
                     st.text(msg["raw"])
 
 # --- Functions ---
@@ -107,19 +98,8 @@ if prompt := st.chat_input("Ask anything..."):
             answer = ask_llm(prompt, context, model, tone)
 
         st.write(answer)
-
-        # Copy button
-        st.button(
-            "Copy answer",
-            key="copy_latest",
-            on_click=lambda: st.toast("Copied to clipboard!")
-        )
-        st.components.v1.html(
-            f"<script>navigator.clipboard.writeText({repr(answer)})</script>",
-            height=0
-        )
-
-        st.caption(f" Searched for: `{prompt}`")
+        st.button("Copy", key=f"copy_latest_{len(st.session_state.messages)}")
+        st.caption(f"🔍 Searched for: `{prompt}`")
 
         with st.expander("Sources"):
             for s in sources:
