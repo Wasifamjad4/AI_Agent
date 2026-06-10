@@ -99,7 +99,7 @@ if prompt := st.chat_input("Ask anything..."):
 
         st.write(answer)
         st.button("Copy", key=f"copy_latest_{len(st.session_state.messages)}")
-        st.caption(f"🔍 Searched for: `{prompt}`")
+        st.caption(f"Searched for: `{prompt}`")
 
         with st.expander("Sources"):
             for s in sources:
