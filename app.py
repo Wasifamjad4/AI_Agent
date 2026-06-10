@@ -82,7 +82,8 @@ def search_web(query: str, max_results: int = 3):
     return context, sources
 
 def ask_llm(question: str, context: str, model: str, tone: str) -> str:
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    api_key = st.secrets.get("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY")
+    client = Groq(api_key=api_key)
     chat = client.chat.completions.create(
         model=model,
         messages=[
