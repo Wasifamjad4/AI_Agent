@@ -69,7 +69,11 @@ Deployed on Streamlit Community Cloud. To deploy your own instance:
 
 AI_Agent/
 ├── app.py            # Streamlit UI
+
 ├── agent.py          # CLI version of the agent
+
 ├── requirements.txt  # Python dependencies
+
 ├── .env              # API key (not pushed to GitHub)
+
 └── .gitignore        # Excludes .env and venv/
